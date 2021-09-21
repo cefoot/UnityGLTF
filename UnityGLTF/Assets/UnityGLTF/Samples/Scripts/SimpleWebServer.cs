@@ -174,7 +174,7 @@ new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
 		private void Process(HttpListenerContext context)
 		{
 			string filename = context.Request.Url.AbsolutePath;
-			Console.WriteLine(filename);
+			Debug.Log($"[SimpleWebServer]:{filename}");
 			filename = filename.Substring(1);
 
 			if (string.IsNullOrEmpty(filename))
@@ -197,7 +197,7 @@ new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
 				try
 				{
 					Stream input = File.OpenRead(filename);
-					
+
 					//Adding permanent http response headers
 					string mime;
 					context.Response.ContentType = _mimeTypeMappings.TryGetValue(Path.GetExtension(filename), out mime)
@@ -216,11 +216,17 @@ new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
 					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				}
 			}
+			else if (Directory.Exists(filename))
+			{
+				var files = Directory.GetFiles(filename);
+				var dirs = Directory.GetDirectories(filename);
+
+			}
 			else
 			{
 				context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 			}
-			
+
 			context.Response.Close();
 		}
 #endif
