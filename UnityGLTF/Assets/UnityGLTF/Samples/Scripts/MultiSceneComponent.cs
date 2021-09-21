@@ -9,6 +9,7 @@ namespace UnityGLTF.Examples
 	{
 		public int SceneIndex = 0;
 		public string Url;
+		public Shader OverrideShader;
 
 		private GLTFSceneImporter _importer;
 		private ImportOptions _importOptions;
@@ -50,7 +51,7 @@ namespace UnityGLTF.Examples
 				_fileName,
 				_importOptions
 				);
-			
+			_importer.CustomShaderName = OverrideShader.name;
 			_importer.SceneParent = gameObject.transform;
 			await _importer.LoadSceneAsync(SceneIndex);
 		}
